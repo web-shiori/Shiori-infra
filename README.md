@@ -1,2 +1,2 @@
 # Shiori-infra
-Web Snapshotのインフラを管理するリポジトリ
+Web SnapshotのAWSリソースのテンプレートを管理するリポジトリ
