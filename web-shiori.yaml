@@ -1,0 +1,19 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: infra for web shiori
+
+Resources:
+  S3Bucket:
+    Type: AWS::S3::Bucket
+
+#
+
+Outputs:
+  S3BucketURL:
+    Value: !Join
+      - ''
+      - - 'https://'
+        - !GetAtt
+          - S3Bucket
+          - DomainName
+    Description: Name of S3 Bucket
+
