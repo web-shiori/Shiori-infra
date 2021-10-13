@@ -24,7 +24,7 @@ Resources:
         S3Key: sample-lambda.zip
       Runtime: go1.x
 
-  # lambdaの実行ロール
+  # Lambdaの実行ロール
   LambdaExecutionRole:
     Type: AWS::IAM::Role
     Properties:
@@ -37,10 +37,15 @@ Resources:
                 - lambda.amazonaws.com
             Action:
               - sts:AssumeRole
+      ManagedPolicyArns:
+        # CloudWatch Log Groupの権限
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 
-# cloud watch log
-# 必要なIAMユーザ・ロール等
+  # CloudWatch Log Group
+
 # S3にファイル保存→lambda実行→ログを書き込むまでできればOK
+# S3にファイル保存したらlambda実行するようにする
+# ↑をログに書き込む
 
 Outputs:
   LambdaCodeS3BucketURL:
