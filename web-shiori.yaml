@@ -37,9 +37,10 @@ Resources:
                 - lambda.amazonaws.com
             Action:
               - sts:AssumeRole
-      ManagedPolicyArns:
-        # CloudWatch Log Groupの権限
-        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+#      ManagedPolicyArns:
+#        # CloudWatch Log Groupの権限
+#        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+# NOTE: ↑これつけたらアップデートがスタックする。後で試す
 
   # CloudWatch Log Group
 
