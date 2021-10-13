@@ -2,18 +2,56 @@ AWSTemplateFormatVersion: 2010-09-09
 Description: infra for web shiori
 
 Resources:
-  S3Bucket:
+  # lambdaのコードを保存するS3バケット
+  LambdaCodeS3Bucket:
     Type: AWS::S3::Bucket
 
-#
+  # スクリーンショットを保存するS3バケット
+  ScreenShotS3Bucket:
+    Type: AWS::S3::Bucket
+
+  # 保存されたPDFのスクリーンショットからページ番号を抽出するLambda関数
+  # コードは https://github.com/web-shiori/Shiori-lambda/tree/main/lambda-page-number-extract を参照
+  # (テスト用に./testのlambda関数を暫定で設定してある)
+  ExtractPDFPageNumberFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: extract_PDF_page_number_function
+      Handler: sample-lambda
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Code:
+        S3Bucket: !Ref LambdaCodeS3Bucket
+        S3Key: sample-lambda.zip
+      Runtime: go1.x
+
+  # lambdaの実行ロール
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+
+# cloud watch log
+# 必要なIAMユーザ・ロール等
+# S3にファイル保存→lambda実行→ログを書き込むまでできればOK
 
 Outputs:
-  S3BucketURL:
+  LambdaCodeS3BucketURL:
+    Value: !Ref LambdaCodeS3Bucket
+    Description: Name of lambda S3 Bucket
+  ScreenShotS3BucketURL:
     Value: !Join
       - ''
       - - 'https://'
         - !GetAtt
-          - S3Bucket
+          - ScreenShotS3Bucket
           - DomainName
-    Description: Name of S3 Bucket
+    Description: Name of ScreenShotS3 Bucket
 
